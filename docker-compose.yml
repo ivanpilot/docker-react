@@ -1,0 +1,21 @@
+version: "3"
+services:
+    web:
+        build: 
+            # context is simply to be really obvious that we want to look inside the current directory. It is needed because we need to specify which file to use as a dockerfile since we added an extension and that by default Docker will only look at Dockerfile -> no extension
+            context: .
+            dockerfile: Dockerfile.dev
+        ports:
+            - 3000:3000
+        volumes:
+            - .:/app
+            - /app/node_modules
+    # the following service is one way to have our test suits working de facto with the command docker-compose but it has its own disadvantages as you cannot inspect or specific command in the terminal since the node server is tied to this same session
+    tests:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes:
+            - .:/app
+            - /app/node_modules
+        command: ["npm", "run", "test"]
