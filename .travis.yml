@@ -16,7 +16,7 @@ services:
 # this tells Travis what to do before running our tests or deploy our project
 before_install:
     # we need to tag the resulting image as we won't have the possibility to run the container by using the id of the image since this is a set of instruction that will be run automatically
-    - docker build -t ivanpilot/docker-react -f Dockerfile.env . 
+    - docker build -t ivanpilot/docker-react -f Dockerfile.dev . 
 
 # this tells Travis what command to execute to actually run our test suit
 script:
