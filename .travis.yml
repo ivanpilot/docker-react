@@ -1,0 +1,24 @@
+# the purpose of this file is to give travis instructions on what to do when it detects that we push a new version of our code on github
+#
+# the process is as follow:
+# 1 - tell Travis we need a copy of Docker running since our entire project is working with docker
+# 2 - Build our image with Dockerfile.env -> Travis is used to run test so this is the development environment
+# 3 - tell Travis how to run our test suit
+# 4 - tell Travis how to deploy our code to AWS
+#
+# when using docker we need super user permission so this tells Travis that the sudo command is required 
+sudo: required
+
+# this tells Travis that we need the docker cli pre-installed
+services:
+    - docker
+
+# this tells Travis what to do before running our tests or deploy our project
+before_install:
+    # we need to tag the resulting image as we won't have the possibility to run the container by using the id of the image since this is a set of instruction that will be run automatically
+    - docker build -t ivanpilot/docker-react -f Dockerfile.env . 
+
+# this tells Travis what command to execute to actually run our test suit
+script:
+    # at the end of each command, Travis expect the process to terminate with a 0 status code indicating there is no error so for each command we need to make sure that it will terminate and not hang forever
+    - docker run ivanpilot/docker-react npm run test -- --coverage
