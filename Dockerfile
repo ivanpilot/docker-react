@@ -18,6 +18,8 @@ COPY . .
 RUN npm run build
 
 FROM nginx
+# this EXPOSE is specifically for elasticbeanstalk for it to know that we need to map our external port to the port 80 inside Docker
+EXPOSE 80
 # here we don't need a tag. the fact of calling FROM indicates to Docker that this is another phase
 COPY --from=builder /app/build /usr/share/nginx/html
 # the --from command means we want to copy sthg from the phase called builder and then we specify the source and the destination paths - the destination is in the nginx docker documentation
