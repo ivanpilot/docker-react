@@ -22,3 +22,19 @@ before_install:
 script:
     # at the end of each command, Travis expect the process to terminate with a 0 status code indicating there is no error so for each command we need to make sure that it will terminate and not hang forever
     - docker run ivanpilot/docker-react npm run test -- --coverage
+
+# this tells Travis what to do once the test run has successfully completed
+# in the below example we are telling Travis how to deploys our app to AWS
+deploy:
+    provider: elasticbeanstalk
+    region: "eu-west-2"
+    app: "docker-react"
+    env: "DockerReact-env"
+    bucket_name: "elasticbeanstalk-eu-west-2-660931516180"
+    bucket_path: "docker-react"
+    on:
+        # this is not related to AWS config but to tell Travis to do the deploy only when the master branch has changed - not the other feature branches
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: 
+        secure: "$AWS_SECRET_KEY"
